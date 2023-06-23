@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    apiKey: "AIzaSyAWmGOMySDTwOjtdHK9v7ikZVym_sZz2f4",
     authDomain: "chat-e7d93.firebaseapp.com",
     projectId: "chat-e7d93",
     storageBucket: "chat-e7d93.appspot.com",
