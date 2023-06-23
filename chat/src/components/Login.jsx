@@ -4,7 +4,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { auth } from "../lib/firebase";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [loginEmail, setLoginEmail] = useState("");
@@ -48,7 +48,7 @@ const handlePasswordChange = (e) =>{
         <input type="password" placeholder="Password" className=" bg-transparent border-2 outline-none py-2 px-4" value={loginPassword} onChange={handlePasswordChange} />
       </div>
       <div className=" text-cyan-400 text-right my-4">
-        <a href={`/register`} className=" cursor-pointer">Register me</a>
+        <Link to={"register"} className=" cursor-pointer">Register me</Link>
       </div>
       <button onClick={login}
       className=" border-2 border-cyan-400 py-2 w-full cursor-pointer hover:bg-cyan-400 hover:text-gray-800">{loading ? "Loading..." : "Login"}</button>
