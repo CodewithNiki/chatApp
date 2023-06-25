@@ -1,12 +1,11 @@
-// import { useState } from "react";
-// import { auth } from "../lib/firebase";
+
 import Sidebar from "../components/Sidebar/Sidebar";
 import Chats from "../components/Chats/chats";
 import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 
 const WelcomePage = () => {
-    const { authUser, signOut } = useAuth();
+    const { authUser } = useAuth();
     const navigate = useNavigate();
 
     if(!authUser){
@@ -21,9 +20,6 @@ const WelcomePage = () => {
                 <Sidebar />
                 <Chats />
             </div>
-            <div>{authUser?.email}</div>
-            <button onClick={signOut}
-                className=" text-white">Logout</button>
         </div>
 
     )
