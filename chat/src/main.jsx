@@ -5,6 +5,8 @@ import RegisterPage from './pages/register';
 import App from './App';
 import LoginPage from './components/Login';
 import WelcomePage from './pages/welcome';
+import About from './pages/about';
+import { AuthUserProvider } from './context/auth';
 
 const router = createBrowserRouter([
     {
@@ -22,11 +24,17 @@ const router = createBrowserRouter([
             {
                 path: "Welcome",
                 element:<WelcomePage/>
+            },
+            {
+                path: "About",
+                element: <About/>
             }
         ],
     },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />
+   <AuthUserProvider>
+     <RouterProvider router={router} />
+   </AuthUserProvider>
 );

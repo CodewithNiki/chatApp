@@ -1,57 +1,43 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { FaUser } from "react-icons/fa";
-import { FaEnvelope } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
 import { auth } from "../lib/firebase";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { useAuth } from "../context/auth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+
+const REDIRECT_PAGE = "/welcome";
+
+const uiConfig = {
+  signInFlow: "popup",
+  signInSuccessUrl: REDIRECT_PAGE,
+  signInOptions: [
+    EmailAuthProvider.PROVIDER_ID,
+    GoogleAuthProvider.PROVIDER_ID,
+  ]
+}
 
 const LoginPage = () => {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { authUser, loading } = useAuth();
   const navigate = useNavigate();
 
-  const login = async () => {
-    try{
-      setLoading(true);
-      const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-      console.log(user);
-      setLoading(false);
-      user.user && navigate("/welcome");
+  useEffect(()=>{
+    if(!loading && authUser){
+      navigate("/welcome")
     }
-    catch(error){
-      console.log(error.message);
-      alert(error.message);
-      setLoading(false)
-    }
-  }
-
-  const handleEmailChange = (e) =>{
-    setLoginEmail(e.target.value)
-}
-
-const handlePasswordChange = (e) =>{
-    setLoginPassword(e.target.value)
-}
+  }, [authUser, loading, navigate])
 
   return (
-    <div className=" border-4 border-cyan-600 text-white py-8 px-6 rounded">
-      <FaUser className=" text-6xl text-slate-50 rounded-full mx-auto bg-slate-200" />
-      <p className=" text-lg text-center mt-2">Welcome Back</p>
-      <div className=" flex items-center gap-4 my-4">
-        <FaEnvelope className=" text-lg" />
-        <input type="text" placeholder="Email ID" className=" bg-transparent border-2 outline-none py-2 px-4" value={loginEmail} onChange={handleEmailChange} />
+    (loading || (!loading && !!authUser)) ? <div className=" bg-slate-900 text-white w-full h-screen flex items-center justify-center ">Loading...</div> 
+    :
+    <div className=" bg-gray-800 w-full h-screen flex items-center justify-center ">
+      <div className=" border-4 border-cyan-700 text-white py-8 px-6 rounded">
+        <FaUser className=" text-6xl text-slate-50 rounded-full mx-auto bg-slate-200" />
+        <p className=" text-xl text-center mt-2 font-bold text-cyan-500">Valdymas Chat</p>
+
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}></StyledFirebaseAuth>
       </div>
-      <div className="flex items-center gap-4">
-        <FaLock />
-        <input type="password" placeholder="Password" className=" bg-transparent border-2 outline-none py-2 px-4" value={loginPassword} onChange={handlePasswordChange} />
-      </div>
-      <div className=" text-cyan-400 text-right my-4">
-        <Link to={"register"} className=" cursor-pointer">Register me</Link>
-      </div>
-      <button onClick={login}
-      className=" border-2 border-cyan-400 py-2 w-full cursor-pointer hover:bg-cyan-400 hover:text-gray-800">{loading ? "Loading..." : "Login"}</button>
     </div>
   )
 }
